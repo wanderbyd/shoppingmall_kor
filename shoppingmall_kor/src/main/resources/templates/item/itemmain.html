@@ -1,0 +1,121 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<title>SHOP</title>
+	<th:block th:insert="utils/imports.html :: meta"></th:block>
+	<th:block th:insert="utils/imports.html :: maincss"></th:block>
+
+</head>
+
+<body>
+	<th:block th:insert="utils/header.html :: header"></th:block>
+	<section>
+
+
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="left-sidebar">
+
+						<div class="keyword">
+							<div class="well2">
+								<form th:action="@{/search}" method="get">
+									<input type="text" name="keyword" th:value="${searchKeyword}">
+									<button type="submit">⌕</button>
+								</form>
+							</div>
+						</div>
+
+						<div class="panel-group category-products" id="accordian">
+
+
+							<div class="panel panel-default">
+
+								<div class="panel-heading">
+									<th:block th:each="category : ${category}">
+										<h4 class="panel-title">
+											<a th:text="${category}" th:href="${'shop?category='+ category}"></a>
+										</h4>
+										<br>
+
+									</th:block>
+									<div class="price-range">
+										<div class="well">
+											<div class="slider-container">
+												<input type="range" class="span2" data-slider-min="0"
+													data-slider-max="400000" data-slider-step="1000"
+													data-slider-value="[5000,10000]" id="sl2">
+												<button type="submit" class="validate" id="validate">설정</button>
+
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="shipping text-center">
+							<img src="images/home/model.jpg" alt="" />
+						</div>
+
+					</div>
+				</div>
+				<ul>
+					<li
+						th:if="${session['loggedInUser'] != null and session['loggedInUser'].email == 'admin@admin.com'}">
+						<a href="/addItem" class="admin-button">
+							<i class="fa fa-plus"></i>
+						</a>
+					</li>
+				</ul>
+
+				<div class="col-sm-9 padding-right">
+					<div class="features_items">
+						<h2 class="title text-center"></h2>
+						<div th:each="item : ${items}" class="col-sm-4">
+							<a th:href="${'detail?id=' + item.itemid}" class="product-link">
+								<div class="product-image-wrapper">
+									<div class="single-products" style="position: relative">
+										<div class="productinfo text-center">
+											<img th:src="${#strings.replace(item.getImagePath(), '/static/', '')}"
+												alt="" width="200px" height="260px" />
+										</div>
+										<div class="product-overlay">
+											<div class="overlay-content">
+												<p th:text="${item.name}"></p>
+												<h2 th:text="${item.getPrice()} + '원'"></h2>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div style="width: 66%; margin-left:auto;margin-right: auto; ">
+		<th:block th:insert="utils/footer.html :: footer"></th:block>
+	</div>
+	<th:block th:insert="utils/imports.html :: mainjs"></th:block>
+	<script>
+		let input = $("#validate")
+		input.click((e) => {
+			e.preventDefault();
+			let tooltip = $(".tooltip-inner")
+			let arr = tooltip.html().split(' : ')
+			let request = "/shop?min=" + arr[0] + "&max=" + arr[1]
+			window.location.href = request
+
+		})
+
+
+	</script>
+
+</body>
+
+</html>

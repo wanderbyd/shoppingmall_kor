@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Cart</title>
+	<th:block th:insert="utils/imports.html :: meta"></th:block>
+	<th:block th:insert="utils/imports.html :: maincss"></th:block>
+	<link rel="stylesheet" href="css/button2.css" type="text/css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@600;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<script th:inline="javascript">
+
+	</script>
+
+	<style>
+		/* 추가된 스타일 */
+		table {
+			border-collapse: collapse;
+			width: 100%;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		th,
+		td {
+			border: 1px solid #dddddd;
+			text-align: left;
+			padding: 8px;
+		}
+
+		.center-align {
+			text-align: center;
+		}
+
+		select {
+			width: 50px;
+			/* 바의 길이를 조절하려는 값으로 변경 */
+		}
+	</style>
+</head><!--/head-->
+
+<body>
+	<th:block th:insert="utils/header.html :: header"></th:block>
+
+	<section id="cartitem">
+		<div class="container" style="border: none;">
+			<div class="breadcrumbs">
+				<ol class="breadcrumb">
+					<li class="active">장바구니</li>
+				</ol>
+			</div>
+			<div>
+				<table>
+					<thead>
+						<tr>
+							<th style="text-align:center;">상품</th>
+							<th style="text-align:center;">상품정보</th>
+							<th style="text-align:center;">수량</th>
+							<th style="text-align:center;">합계</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="item : ${cartitem.keySet()}">
+							<td>
+								<div style="text-align: center;">
+									<a th:href="${'/detail?id=' + item.itemid}">
+										<img th:src="${#strings.replace(item.getImagePath(), '/static/', '')}" alt=""
+											th:width="100" th:height="100" />
+									</a>
+								</div>
+							</td>
+							<td style="max-width: 320px; text-align: center;">
+								<h4 style="font-size: 15px;" th:text="${item.getName()}"></h4>		
+							</td>
+							<td style="text-align: center;">
+								<form action="/updateQuantity" method="post">
+									<input type="hidden" name="itemid" th:value="${item.getItemid()}">
+									<input type="hidden" name="cartid" th:value="${cartid}">
+									<select name="newQuantity"
+										style="font-size: 15px; padding: 1px; display: inline-block;">
+										<option value="1" th:selected="${cartitem.get(item) == 1}">1</option>
+										<option value="2" th:selected="${cartitem.get(item) == 2}">2</option>
+										<option value="3" th:selected="${cartitem.get(item) == 3}">3</option>
+										<option value="4" th:selected="${cartitem.get(item) == 4}">4</option>
+										<option value="5" th:selected="${cartitem.get(item) == 5}">5</option>
+										<option value="10" th:selected="${cartitem.get(item) == 10}">10</option>
+									</select>
+									<button type="submit">Update</button>
+								</form>
+							</td>
+							<td style="text-align: center;">
+								<p style="font-size: 15px;"
+									th:text="(${item.getPrice()} * ${cartitem.get(item)}) + '원' "></p>
+							</td>
+							<td style="width: 50px; text-align: center;">
+								<a class="cart_quantity_delete" th:href="${'/removeFromCart?itemid='+ item.getItemid()}"
+									style="font-size: 45px; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+									<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+										class="bi bi-x-square" viewBox="0 0 16 16">
+										<path
+											d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+										<path
+											d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+									</svg>
+								</a>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="5">
+								<label style="font-size: 35px; display: inline-block; margin-right: 20px;">
+									<input type="radio" name="payment">
+									<i class="fa fa-cc-mastercard" style="color:red; padding: 5px;"></i>
+								</label>
+								<label style="font-size: 35px; display: inline-block; margin-right: 20px;">
+									<input type="radio" name="payment">
+									<i class="fa fa-cc-visa" style="color:navy; padding: 5px;"></i>
+								</label>
+								<label style="font-size: 35px; display: inline-block;">
+									<input type="radio" name="payment" checked>
+									<i class="fa fa-paypal" style="color: #0051e6; padding: 5px;"
+										aria-hidden="true"></i>
+								</label>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		</td>
+		</tr>
+		</tbody>
+		</table>
+		</div>
+		<p><br><br></p>
+		<table style="width: 500px;margin-left:1070px;">
+			<th style="text-align: center; font-size: 24px;">
+				<span th:text="'결제예정금액'"></span>
+			</th>
+			<th style="  font-size: 24px; ">
+				<table>
+					<span th:text="${total}+'원'"></span>
+				</table>
+				</td>
+		</table>
+		<p></p>
+
+		<form th:action="'/orders/place-order?cartid='+${cartid}" method="post" style="display: inline;">
+			<button class="button btnFloat btnLightBlue" type="submit"
+				style="position: relative; display: inline-block; top: 10px; right: -1070px; border: none; background-color: transparent;"></button>
+		</form>
+
+		<br><br><br><br>
+
+
+
+		</div>
+	</section> 
+
+	<div style="width: 66%; margin-left:auto;margin-right: auto; ">
+		<th:block th:insert="utils/footer.html :: footer"></th:block>
+	</div>
+	<th:block th:insert="utils/imports.html :: mainjs"></th:block>
+
+</body>
+
+</html>

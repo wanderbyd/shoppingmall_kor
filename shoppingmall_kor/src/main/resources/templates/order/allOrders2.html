@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<th:block th:insert="utils/imports.html :: meta"></th:block>
+	<th:block th:insert="utils/imports.html :: maincss"></th:block>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@600;800&display=swap" rel="stylesheet">
+	<style>
+		/* 추가된 스타일 */
+		table {
+			border-collapse: collapse;
+			width: 100%;
+			font-family: 'Noto Sans KR', sans-serif;
+			border: 1px solid #dddddd;
+			/* Add border to the table */
+		}
+
+		th,
+		td {
+			border: 1px solid #dddddd;
+			text-align: left;
+			padding: 8px;
+		}
+
+		th {
+			background-color: rgb(192, 192, 192);
+			color: rgb(0, 157, 157);
+		}
+
+		.center-align {
+			text-align: center;
+		}
+	
+    #totalOrderPrice table {
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        }
+        
+        #totalOrderPrice table td {
+        text-align: right; /* 각 셀의 텍스트를 오른쪽으로 정렬 */
+    }    
+        
+    
+
+
+	</style>
+
+</head>
+
+<body>
+	<th:block th:insert="utils/header.html :: header"></th:block>
+	<br><br>
+
+	<div class="container">
+
+		<div class="row">
+			<div class="col-sm-13">
+				<div>
+					<h2 style="text-align: center;">모든 주문 내역 보기(Admin version)</h2>
+
+					<div th:each="userAndDateTime : ${groupedByUserAndDateTime}">
+						<h3 style="text-align: center;" th:text="${userAndDateTime.key + '님의 주문 내역서'}"></h3>
+
+						<div th:each="dateTimeAndOrders : ${userAndDateTime.value}">
+						<!--	<div id="totalOrderPrice"></div>-->
+							<table class="table order-table">
+								<!-- Table header -->
+								<thead>
+									<tr>
+
+										<th style="text-align:center;">주문 날짜</th>
+										<th style="text-align:center;">회원 이메일</th>
+										<th style="text-align:center;">배송지 주소</th>
+										<th style="text-align:center;">아이템 이름</th>
+										<th style="text-align:center;">주문 수량</th>
+										<th style="text-align:center;">수량 합산 가격</th>
+										
+									</tr>
+								</thead>
+								<!-- Table body -->
+								<tbody>
+								
+
+									<!-- Now loggedInUser should be accessible here -->
+									<tr th:each="order : ${dateTimeAndOrders.value}">
+										 <th:block th:if="${order.orderprice != null}">
+									<p style="text-align: center;" th:text="'Total Price: ' + ${totalPrice}"></p>
+								<td style="text-align: center;"
+											th:text="${#temporals.format(order.orderdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+
+									<td style="text-align: center;" th:text="${order?.users?.email}"></td>
+									<td style="text-align: center;" th:text="${order?.users?.address}"></td>
+									<td style="text-align: center;" th:text="${order?.item?.name}"></td>								
+									<td style="text-align: center;" th:text="${order.quantity}"></td>
+									<td style="text-align: center;" th:text="${order.orderprice}"></td>						
+									</tr>
+									</td>
+									</tr>
+								</tbody>
+									<tfoot>
+									<tr>
+								<p style="text-align: center;" th:text="'Total Price: ' + ${totalPrice}"></p>
+										<td colspan="4"></td>
+										<td style="text-align: center;">총 주문 가격</td>
+
+							<script th:inline="javascript">
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    var totalOrderPriceByTable = {}; // 각 테이블의 총 주문 가격을 저장하는 객체
+
+                                    /*[# th:each="order : ${dateTimeAndOrders.value}"]*/
+                                    var orderId = /*[[${order.orderid}]]*/ 0;
+                                    var orderPrice = /*[[${order.orderprice}]]*/ 0;
+                                    var orderDate = /*[[${order.orderdate}]]*/ ''; // 주문 날짜
+
+                                    if (orderPrice !== undefined) {
+                                        // Log each order to the console
+                                        console.log( "" + orderPrice);
+
+                                        // Accumulate the order price for each table
+                                        if (!totalOrderPriceByTable[orderDate]) {
+                                            totalOrderPriceByTable[orderDate] = 0; // 테이블이 없으면 초기화
+                                        }
+
+                                        totalOrderPriceByTable[orderDate] += orderPrice;
+
+                                        // Create a new div element to display order information
+                                        var orderInfoDiv = document.createElement('div');
+                                        orderInfoDiv.innerText = "Order ID: " + orderId + " Total Order Price: " + orderPrice;
+
+                                        // Append the new div to the orderInfoContainer of the corresponding table
+                                        var orderInfoContainer = document.getElementById('orderInfoContainer');
+                                        if (orderInfoContainer) {
+                                            orderInfoContainer.appendChild(orderInfoDiv);
+                                        }
+                                    }
+                                    /*[/]*/
+
+                                    // Create a table for each date and display total order price
+                                    for (var table in totalOrderPriceByTable) {
+                                        console.log("총 주문 가격: " + totalOrderPriceByTable[table]);
+
+                                        // Create a new table element
+                                        var tableElement = document.createElement('table');
+                                        tableElement.border = '1';
+
+                                        // Create a new row for the table
+                                        var row = tableElement.insertRow();
+
+                                        // Create a new cell for the table
+                                        var cell = row.insertCell();
+
+                                        // Create a new span element to display total order price for the table
+                                        var totalOrderPriceSpan = document.createElement('span');
+                                        totalOrderPriceSpan.id = 'totalOrderPrice_' + table;
+                                        totalOrderPriceSpan.innerText = "Total Order Price: " + totalOrderPriceByTable[table];
+
+                                        // Append the span to the cell
+                                        cell.appendChild(totalOrderPriceSpan);
+
+                                        // Append the table to the body (or another appropriate parent element)
+                                        var totalOrderPriceContainer = document.getElementById('totalOrderPrice');
+                                        if (totalOrderPriceContainer) {
+                                            totalOrderPriceContainer.appendChild(tableElement);
+                                        }
+                                    }
+                                });
+                            </script>
+										<span th:text="${totalOrderPrice2}"></span>
+
+										</td>
+										<td></td>
+
+
+									</tr>
+								</tfoot>
+							</table>
+
+						</div>
+					
+					</div>
+				</div>
+				
+				<!-- Order Info Container -->
+				<!-- <div id="orderInfoContainer"></div>-->
+				<!-- Total Order Price Container -->
+
+				<!-- Include Bootstrap JS and Popper.js (required for Bootstrap) -->
+				<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+					integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+					crossorigin="anonymous"></script>
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+					integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+					crossorigin="anonymous"></script>
+				<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+					integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+					crossorigin="anonymous"></script>
+
+				<br><br><br>
+
+				<div style="width: 66%; margin-left:auto;margin-right: auto; ">
+
+					<th:block th:insert="utils/footer.html :: footer"></th:block>
+
+				</div>
+
+				<th:block th:insert="utils/imports.html :: mainjs"></th:block>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

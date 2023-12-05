@@ -1,0 +1,86 @@
+/*!
+ * Slider for Bootstrap
+ *
+ * Copyright 2012 Stefan Petre
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ */
+
+.slider {
+	display: inline-block;
+	vertical-align: middle;
+	position: relative;
+}
+
+/* Horizontal Slider Styles */
+.slider.slider-horizontal {
+	width: 210px;
+	height: 20px;
+}
+
+.slider.slider-horizontal .slider-track {
+	height: 1px;
+	left: 0;
+	margin-top: -5px;
+	top: 50%;
+	width: 100%;
+}
+
+.slider.slider-horizontal .slider-selection {
+	height: 100%;
+	top: 0;
+	bottom: 0;
+}
+
+/* Common Styles for Slider */
+
+.slider input {
+	opacity: 0;
+}
+
+.slider .tooltip-inner {
+	white-space: nowrap;
+}
+
+/* Slider Track Styles 영향 색*/
+.slider-track {
+	position: absolute;
+	cursor: pointer;
+	background-color: #f7f7f7;
+	background-image: -moz-linear-gradient(top, #f5f5f5, #f9f9f9);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f5f5), to(#f9f9f9));
+	background-image: -webkit-linear-gradient(top, #f5f5f5, #f9f9f9);
+	background-image: -o-linear-gradient(top, #f5f5f5, #f9f9f9);
+	background-image: linear-gradient(to bottom, #f5f5f5, #f9f9f9);
+	/*  background-repeat: repeat-x;*/
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+	border-radius: 1px;
+}
+
+/* Slider Selection Styles 영향있음 현재*/
+.slider-selection {
+	box-sizing: border-box;
+	background: none repeat scroll 0 0 rgb(0, 0, 0);
+	border-radius: 10px;
+	/* Reduced border radius */
+	box-shadow: 0 0px 0 rgba(0, 0, 0, 0.15) inset;
+	position: absolute;
+}
+
+.price-range .well {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+
+/*프라이스설정버튼 나란히 한줄로 보여지는 코드 지우지 말것*/
+.price-range .slider-container {
+	display: flex;
+	align-items: center;
+}
+
+.slider.slider-horizontal .slider-handle.triangle .slider.slider-vertical .slider-handle.triangle {
+	display: none !important;
+}

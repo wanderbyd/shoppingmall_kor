@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Login</title>
+	<th:block th:insert="utils/imports.html :: meta"></th:block>
+	<th:block th:insert="utils/imports.html :: maincss"></th:block>
+</head><!--/head-->
+
+<body>
+	<th:block th:insert="utils/header.html :: header"></th:block>
+	<section id="form"><!--form-->
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-1">
+					<div class="login-form"><!--login form-->
+						<h2>로그인</h2>
+						<form action="/login" method="post">
+							<input type="email" placeholder="Email Address" name="email" />
+							<input type="password" placeholder="************" name="password" />
+							<span>
+								아이디가 없으신가요? <a href="/register">회원가입</a>.
+							</span>
+							<br>
+							<p style="color: red" th:text="${error}"></p>
+							<button type="submit" class="btn btn-default">Login</button>
+						</form>
+					</div><!--/login form-->
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div style="width: 66%; margin-left:auto;margin-right: auto; ">
+		<th:block th:insert="utils/footer.html :: footer"></th:block>
+	</div>
+	<th:block th:insert="utils/imports.html :: mainjs"></th:block>
+</body>
+
+</html>

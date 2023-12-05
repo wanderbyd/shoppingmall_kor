@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<title>Order Detail</title>
+
+
+<head>
+
+	<th:block th:insert="utils/imports.html :: meta"></th:block>
+
+	<th:block th:insert="utils/imports.html :: maincss"></th:block>
+
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@600;800&display=swap" rel="stylesheet">
+
+	<style>
+		/* 추가된 스타일 */
+
+		table {
+
+			border-collapse: collapse;
+
+			width: 100%;
+
+			font-family: 'Noto Sans KR', sans-serif;
+
+			border: 1px solid #dddddd;
+
+			/* Add border to the table */
+
+		}
+
+
+
+		th,
+
+		td {
+
+			border: 1px solid #dddddd;
+
+			text-align: left;
+
+			padding: 8px;
+
+		}
+
+
+
+		th {
+
+			background-color: rgb(192, 192, 192);
+
+			color: rgb(0, 157, 157);
+
+		}
+
+
+
+		.center-align {
+
+			text-align: center;
+
+		}
+
+
+
+		#totalOrderPrice table {
+
+			margin-top: 20px;
+
+			border: 1px solid #ddd;
+
+			padding: 10px;
+
+			border-radius: 5px;
+
+			background-color: #f9f9f9;
+
+		}
+
+
+
+		#totalOrderPrice table td {
+
+			text-align: right;
+
+			/* 각 셀의 텍스트를 오른쪽으로 정렬 */
+
+		}
+	</style>
+
+
+
+</head>
+
+
+
+<body>
+
+	<th:block th:insert="utils/header.html :: header"></th:block>
+
+	<br><br>
+
+
+
+	<div class="container">
+
+
+
+		<div class="row">
+
+			<div class="col-sm-13">
+
+				<div>
+
+					<h2 style="text-align: center;">모든 주문 내역 보기(Admin version)</h2>
+
+
+
+					<div th:each="userAndDateTime : ${groupedByUserAndDateTime}">
+
+						<h3 style="text-align: center;" th:text="${userAndDateTime.key + '님의 주문 내역서'}"></h3>
+
+
+
+						<div th:each="dateTimeAndOrders : ${userAndDateTime.value}">
+
+					
+
+							<table class="table order-table">
+
+						
+
+								<thead>
+
+									<tr>
+
+
+
+										<th style="text-align:center;">주문 날짜</th>
+
+										<th style="text-align:center;">회원 이메일</th>
+
+										<th style="text-align:center;">배송지 주소</th>
+
+										<th style="text-align:center;">아이템 이름</th>
+
+										<th style="text-align:center;">주문 수량</th>
+
+										<th style="text-align:center;">수량 합산 가격</th>
+
+
+
+									</tr>
+
+								</thead>
+
+				
+
+								<tbody>
+
+
+
+									<tr th:each="order : ${dateTimeAndOrders.value}">
+
+										<!-- 주문 날짜 표시 -->
+
+										<td style="text-align: center;"
+											th:text="${#temporals.format(order.orderdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+
+
+
+										<td style="text-align: center;" th:text="${order?.users?.email}"></td>
+
+										<td style="text-align: center;" th:text="${order?.users?.address}"></td>
+
+										<td style="text-align: center;" th:text="${order?.item?.name}"></td>
+
+										<td style="text-align: center;" th:text="${order.quantity}"></td>
+
+										<td style="text-align: center;" th:text="${order.orderprice}"></td>
+
+									</tr>
+
+									</td>
+
+									</tr>
+
+								</tbody>
+
+
+
+								<tfoot>
+
+									<tr>
+										<td colspan="4" style="text-align: center;">
+											<span class="totalOrderPriceText" style="font-size: 17px;"></span>
+										</td>
+
+
+										<td colspan="2" style="text-align: center;">
+
+											<span class="totalOrderPriceAmount" style="font-size: 17px;  color: rgb(0, 0, 0);"></span>
+
+										</td>
+
+									</tr>
+
+								</tfoot>
+
+
+
+							</table>
+
+						</div>
+
+					</div>
+
+				</div>
+
+
+
+				<script>
+
+					document.addEventListener('DOMContentLoaded', function () {
+
+						var tables = document.querySelectorAll('.order-table');
+
+
+
+						tables.forEach(function (table) {
+
+							var rows = table.querySelectorAll('tbody tr');
+
+							var total = 0;
+
+
+
+							rows.forEach(function (row) {
+
+								var orderPriceCell = row.querySelector('td:nth-child(6)'); // 6번째 셀이 주문 가격
+
+
+
+								if (orderPriceCell) {
+
+									var orderPrice = parseFloat(orderPriceCell.textContent);
+
+									total += orderPrice;
+
+								}
+
+							});
+
+
+
+							var tfoot = table.querySelector('tfoot');
+
+							if (tfoot) {
+
+								var totalOrderPriceText = tfoot.querySelector('.totalOrderPriceText');
+
+								var totalOrderPriceAmount = tfoot.querySelector('.totalOrderPriceAmount');
+
+
+
+								if (totalOrderPriceText && totalOrderPriceAmount) {
+
+									totalOrderPriceText.textContent = '총 주문 가격';
+
+									// 숫자에 콤마 추가
+									totalOrderPriceAmount.textContent = total.toLocaleString() + '원';
+
+
+								}
+
+							}
+
+						});
+
+					});
+
+				</script>
+
+
+
+			</div>
+
+		</div>
+
+	</div>
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+
+
+	<br><br><br>
+
+
+	<div style="width: 66%; margin-left:auto;margin-right: auto; ">
+
+
+
+		<th:block th:insert="utils/footer.html :: footer"></th:block>
+
+
+
+	</div>
+
+
+
+	<th:block th:insert="utils/imports.html :: mainjs"></th:block>
+
+	</div>
+
+	</div>
+
+	</div>
+
+</body>
+
+
+
+</html>

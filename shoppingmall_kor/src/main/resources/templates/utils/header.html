@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+</head>
+
+<body>
+	<header id="header"><!--header-->
+		<div class="header-middle"><!--header-middle-->
+			<div class="container" style="border: none; margin-top: 0px;padding-top: 0px;">
+				<div class="row" style="padding-bottom: 0px;">
+					<div class="animated-title">
+						<div class="track">
+							<div class="content">
+								2023 FW 베스트 바로보기 &emsp;&emsp;&emsp;/&emsp;&emsp;&emsp; 겨울 할인상품&emsp;&emsp;
+								&emsp;/&emsp;&emsp;&emsp; 가장 잘나가는 브랜드 &emsp;&emsp;&emsp;/&emsp; &emsp;&emsp;남녀노소 누구나
+								찾는 쇼핑몰 &emsp;&emsp;&emsp;/&emsp;&emsp;&emsp; 행사를 가장 많이 하는 쇼핑몰 1위
+								&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;
+								아우터가 멋들어지는 집 &emsp;&emsp;&emsp;/&emsp; 데이트룩의 성지 &emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;
+								남친룩의 정석&emsp;&emsp; &emsp;/&emsp;&emsp;&emsp; 재방문률 압도적 1위
+								&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;2023 FW 베스트 바로보기
+								&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp; 겨울 할인상품 &emsp;&emsp;&emsp;/&emsp;&emsp;&emsp; 가장
+								잘나가는 브랜드
+								&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp; 남녀노소 누구나 찾는 쇼핑몰
+								&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp; 행사를 가장 많이 하는 쇼핑몰 1위
+								&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;아우터가 멋들어지는 집 &emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;
+								데이트룩의 성지 &emsp;&emsp;&emsp;/&emsp;&emsp;&emsp; 남친룩의 정석
+								&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp; 재방문률 압도적 1위
+
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="col-sm-4" style="margin-top: 0px;">
+						<div class="logo pull-left" style="margin-left: 20px;">
+							<a href="/"><img src="images/home/logo.png" alt="" /></a>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="shop-menu pull-right" style="padding-top: 12px; padding-right: 20px;">
+							<ul>
+								<!-- 세션이 인증되어 있을 때 -->
+							 <i class="fa fa-users"></i>
+								<li sec:authorize="${session.getAttribute('loggedInUser') ne null}">
+								
+									<div>
+										<span th:if="${session['loggedInUser'] != null}">
+											<span
+												th:text="${session['loggedInUser'].lastname + ' ' + session['loggedInUser'].firstname}"></span>
+										</span>
+									</div>
+								</li>
+								<li><a href="/cart"><i class="fa fa-shopping-cart"></i> 장바구니</a></li>
+								<li>
+									
+									<a href="/allOrders">주문정보</a>
+								</li>
+								<li th:unless="${session['loggedInUser'] != null}">
+									<a href="/login"><i class="fa fa-lock"></i> 로그인</a>
+								</li>
+								<li th:if="${session['loggedInUser'] != null}">
+									<a href="/logout"><i class="fa fa-lock"></i> 로그아웃</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/header-middle-->
+
+		<div class="header-bottom" style="padding-top: 0px;padding-bottom: 0px;"><!--header-bottom-->
+			<div class="container" style="border: none; padding-top: 0px;padding-bottom: 0px;margin-top: 0px;">
+				<div class="row">
+					<div class="col-sm-9">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse"
+								data-target=".navbar-collapse">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+						</div>
+						<div class="mainmenu pull-left">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="/" style="left:50px">Home</a></li>
+								<div class="dropdown">
+									<button class="dropbtn">
+										<a href="shop" style="color: black;">
+										상품 둘러보기
+										</a>
+									</button>
+									<div class="dropdown-content">
+										<a href="shop">전체 상품</a>
+										<a href="/shop?category=상의">상의</a>
+										<a href="/shop?category=하의">하의</a>
+										<a href="/shop?category=아우터">아우터</a>
+										<a href="/shop?category=스포츠웨어">스포츠웨어</a>
+										<a href="/shop?category=모자">모자</a>
+										<a href="/shop?category=가방">가방</a>
+										<a href="/shop?category=슈즈">슈즈</a>
+										<a href="/shop?category=액세사리">액세사리</a>
+									</div>
+								</div>
+								<!--<li><a href="shop">상품 둘러보기</a></li>-->
+								
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/header-bottom-->
+	</header>
+</body>
+
+</html>

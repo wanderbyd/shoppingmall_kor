@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Register</title>
+	<th:block th:insert="utils/imports.html :: meta"></th:block>
+	<th:block th:insert="utils/imports.html :: maincss"></th:block>
+</head><!--/head-->
+
+<body>
+	<th:block th:insert="utils/header.html :: header"></th:block>
+
+	<section id="form"><!--form-->
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="signup-form"><!--sign up form-->
+						<h2>회원가입</h2>
+						<form action="/register" method="post">
+							<input type="text" placeholder="이름" name="lastname" />
+							<input type="text" placeholder="성" name="firstname" />
+							<input type="address" placeholder="주소" name="address" />
+							<input type="email" placeholder="이메일 주소" name="email" />
+							<input type="password" placeholder="비밀번호" name="hashedpassword" />
+
+							<span>
+								아이디를 가지고 있습니까? <a href="/login">로그인</a>.
+							</span>
+							<br><br><br>
+							<p style="color: red" th:text="${error}"></p>
+							<button type="submit" class="btn btn-default">Signup</button>
+
+						</form>
+					</div><!--/sign up form-->
+				</div>
+			</div>
+		</div>
+	</section><!--/form-->
+
+	<div style="width: 66%; margin-left:auto;margin-right: auto; ">
+		<th:block th:insert="utils/footer.html :: footer"></th:block>
+	</div>
+	<th:block th:insert="utils/imports.html :: mainjs"></th:block>
+
+</body>
+
+</html>

@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+		<title> Detail </title>
+	<th:block th:insert="utils/imports.html :: meta"></th:block>
+	<th:block th:insert="utils/imports.html :: maincss"></th:block>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+	<link rel="stylesheet" href="css/button2.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@600;800&display=swap" rel="stylesheet">
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+
+	<!-- 부트스트랩 JS -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+
+
+	<!--리뷰 쓰는곳 가운데 정렬-->
+	<style>
+		.custom-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 40vh;
+			/* 높이를 화면 전체 높이로 설정하여 세로 가운데 정렬합니다. */
+		}
+
+		.custom-form {
+			width: 70%;
+			max-width: 400px;
+			padding: 30px;
+			border: 1px solid #ccc;
+			/* 폼 주위에 테두리를 추가합니다. */
+			border-radius: 8px;
+			/* 테두리를 둥글게 만듭니다. */
+		}
+
+		/* - 리뷰 보이는곳 컨텐츠 표 크기*/
+		#reviewList {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			margin-top: 100px;
+		}
+
+		.review-row {
+			flex: 10 1 calc(48% - 10px);
+			/* 48% 너비로 설정, 여백은 10px */
+
+
+			margin-bottom: 20px;
+			/* 하단 여백 추가 */
+			border: 1px solid #ddd;
+			/* 테두리 추가 */
+			padding: 100px;
+			/* 내부 여백 추가 */
+			box-sizing: border-box;
+			/* 테두리와 여백을 요소의 크기에 포함 */
+		}
+
+		.review-contents {
+			height: 100%;
+			/* 리뷰 내용 컨테이너가 행의 높이를 100%로 채우도록 설정 */
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+		}
+
+		.text-center2 {
+			margin: 100px auto;
+			/* Auto for left and right margins */
+			margin-bottom: 0;
+			display: block;
+			/* Ensures that it's a block-level element */
+			text-align: center;
+			/* Center the text inside the element */
+		}
+
+		/* 이미지에 호버 효과 추가 */
+		.hover-zoom {
+			transition: transform 0.3s ease-in-out;
+		}
+
+		/* 호버 시 이미지 확대 효과 */
+		.hover-zoom:hover {
+			transform: scale(1.4);
+			/*  확대 */
+		}
+
+
+		/* Styles for the imagemodal */
+		.imagemodal {
+			display: none;
+			position: fixed;
+			z-index: 1;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.9);
+			padding-top: 250px;
+		}
+
+		.modal-content {
+			margin: auto;
+			display: block;
+			max-width: 800px;
+			max-height: 600px;
+		}
+
+		.modal-content img {
+			width: 100%;
+		}
+
+		#hover-message {
+			display: none;
+			position: absolute;
+			background-color: rgba(0, 0, 0, 0.7);
+			color: #fff;
+			padding: 0px;
+			border-radius: 5px;
+			white-space: nowrap;
+			/* Prevent multiline messages */
+			position: absolute;
+			transform: translateX(-50%);
+			left: 50%;
+			bottom: 0%;
+		}
+
+		.image-container {
+			position: relative;
+			display: inline-block;
+		}
+
+		.hover-zoom {
+			max-width: 80px;
+			max-height: 80px;
+		}
+
+		.image-container:hover #hover-message {
+			display: block;
+		}
+
+
+
+		.custom-container2 {
+			text-align: center;
+		}
+
+		.custom-item2 {
+			display: flex;
+			justify-content: center;
+			margin: 20px 0;
+		}
+
+		.custom-box2 {
+			background-color: #3498db;
+			padding: 10px;
+			border-radius: 5px;
+			text-align: center;
+			width: 140px;
+
+		}
+
+		.custom-box2 a {
+			color: #fff;
+			text-decoration: none;
+			font-weight: bold;
+		}
+
+		.custom-box2:hover {
+			background-color: #2980b9;
+		}
+	</style>
+
+
+	</style>
+
+
+	<style>
+		.summary-container {
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+		.summary-info {
+			flex: 1 1 calc(-20% -20px);
+			/* 50% 폭, 여백 제외 */
+			float: right;
+			width: 500px;
+			height: 600px;
+			padding: 2px;
+			box-sizing: border-box;
+			flex-basis: calc(20% - 20px);
+			text-align: left;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.showstep1 {
+			max-height: 300px;
+			overflow: hidden;
+		}
+
+		.showstep2 {
+			max-height: 600px;
+			overflow: hidden;
+		}
+
+		.content {
+			height: 1000px;
+			text-align: center;
+
+		}
+
+		.hide {
+			display: none;
+		}
+
+		.detailinfo {
+			max-height: 300px;
+			overflow: hidden;
+		}
+
+		.detailinfo.showstep2 {
+			max-height: none;
+			/* 이미지 섹션이 펼쳐질 때 최대 높이 해제 */
+		}
+
+		.content {
+			height: auto;
+			/* 이미지 섹션이 펼쳐질 때 내용 높이 자동 조절 */
+		}
+
+		#slider {
+			overflow: hidden;
+			position: relative;
+			/* border: 20px solid red; */
+			/* // 이미지 보여지는 뷰 부분만큼 px조절 */
+			margin-left: auto;
+			margin-right: auto;
+			width: 1200px;
+			height: 200px;
+			box-sizing: border-box;
+
+		}
+
+		.image-box {
+			/* 원본+클론의 총 합 */
+			width: 2100px;
+			height: 100%;
+			display: flex;
+			flex-wrap: wrap;
+			animation: bannermove 20s linear infinite;
+			margin-right: 1500px;
+
+		}
+
+		.image-box>div {
+			margin: 0px -1px 0px 0px;
+		}
+
+		@keyframes bannermove {
+			0% {
+				transform: translate(0, 0);
+			}
+
+			100% {
+				transform: translate(-50%, 0);
+			}
+		}
+	</style>
+</head>
+
+<!-- 페이지 상단에 현재 아이템의 아이디를 저장하는 input 추가 -->
+<input type="hidden" id="currentItemId" th:value="${item.itemid}" />
+
+<body>
+	<th:block th:insert="utils/header.html :: header"></th:block>
+	<div class="container" style="border: none; margin-top: 0px;">
+		<div class="row">
+			<div class="col-sm-11 padding-right">
+				<div class="product-details">
+					<div class="col-sm-5">
+						<div class="view-product" style="border: none;">
+							<img th:src="${#strings.replace(item.getImagePath(), '/static/', '')}" alt="" th:width="450"
+								th:height="500" />
+						</div>
+					</div>
+					<div class="summary-info" style="padding: 20px;">
+						<h2 style="  text-align: center; font-size: 24px; margin-bottom: 20px; color: gray;"
+							th:text="${item.name}"></h2>
+						<br>
+						<div style="border: solid 1px rgb(192, 192, 192)"></div>
+						<br><br>
+						<a th:if="${session['loggedInUser'] != null and session['loggedInUser'].email == 'admin@admin.com'}"
+							th:href="'editItem?itemid='+${item.getItemid()}">
+							<i class="fa fa-edit" style="font-size: 30px; position: absolute; top: 0; right: 0;"></i>
+						</a>
+
+
+
+
+
+
+
+
+						<th:block th:if="${item.isSale()}">
+							<div style="left: 500px;">
+								<img src="images/home/sale.png" class="newarrival" alt="" />
+							</div>
+						</th:block>
+						<table>
+							<thead>
+								<tr>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">
+										<span style="font-size: 17px; color: #555555; margin-right: 30px;">상품요약정보</span>
+									</th>
+									<td>
+										<span style="font-size: 13px; color: #555555;"
+											th:text="${item.getDescription()}"></span>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+						<br>
+						<table>
+							<thead>
+								<tr>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<tr>
+									<th scope="row">
+										<span style="font-size: 17px; color: #555555; margin-right: 30px; ">가격&emsp;
+											&emsp; &ensp; &ensp; </span>
+									</th>
+
+
+									<td>
+										<span style="font-size: 13px; color: #555555"
+											th:text="${item.getPrice() + '원'}"></span>
+
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<br>
+
+						<table>
+							<thead>
+								<tr>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<tr>
+									<th scope="row">
+										<span style="font-size: 17px; color: #555555; margin-right: 30px; ">수량&emsp;
+											&emsp; &ensp; &ensp; </span>
+									</th>
+									<td>
+										<span style="font-size: 13px; color: #555555"
+											th:text="${item.getStock()}">개</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<br>
+						<table>
+							<thead>
+								<tr>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">
+										<span style="font-size: 17px; color: #555555; margin-right: 30px; ">카테고리&emsp;
+											&ensp; </span>
+									</th>
+									<td>
+										<span style="font-size: 13px; color: #555555"
+											th:text="${item.getCategory()}"></span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<br><br><br><br>
+						<a href="" style="position: absolute; top: 10; right: 350px;"
+							th:href="'/cart?itemid=' + ${item.getItemid()}" class="button btnFloat btnBlueGreen">
+							<i class="fa fa-shopping-cart"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+	<table>
+		<div id="slider">
+			<div class="image-box">
+				<div><img class="" src="/images/home/img1.png" alt=""></div>
+				<div><img class="" src="/images/home/img2.png" alt=""></div>
+				<div><img class="" src="/images/home/img3.jpg" alt=""></div>
+				<div><img class="" src="/images/home/img4.jpg" alt=""></div>
+				<div><img class="" src="/images/home/img5.jpg" alt=""></div>
+				<div><img class="" src="/images/home/img6.jpg" alt=""></div>
+				<div><img class="" src="/images/home/img7.png" alt=""></div>
+				<div><img class="" src="/images/home/img8.png" alt=""></div>
+				<div><img class="" src="/images/home/img9.png" alt=""></div>
+				<div><img class="" src="/images/home/img10.png" alt=""></div>
+			</div>
+		</div>
+	</table>
+	<br><br><br><br><br>
+	<div class="custom-container2">
+		<div class="custom-item2">
+			<div class="custom-box2">
+				<a href="#detail">상세보기</a>
+			</div>
+			&ensp;
+			<div class="custom-box2">
+				<a href="#reviewListContainer">리뷰</a>
+			</div>
+			&ensp;
+			<div class="custom-box2">
+				<a href="#qna">Q&A</a>
+			</div>
+		</div>
+	</div>
+
+	<!-- 이미지 섹션 추가 --><!-- 이미지 섹션 추가 -->
+	<section id="detail">
+
+		<hr style="width:66%;height:10px;border:none;background-color:rgb(64, 128, 128);">
+		<div class="container" style="border: none;">
+			<!-- Add a horizontal line -->
+			<div class="row justify-content-center">
+				<div class="col-sm-12">
+					<h2>상세보기</h2>
+					<tbody>
+						<tr>
+							<td>
+								<div class="detailinfo showstep1">
+									<div class="content">
+										<img th:src="${#strings.replace(item.getImagePath2(), '/static/', '')}"
+											alt="" />
+									</div>
+								</div>
+								<a href="" class="button btnFloat btn_open"></a><a href=""
+									class="button btnFloat btn_close"></a>
+							</td>
+						</tr>
+					</tbody>
+					<table>
+						<thead>
+							<tr>
+								<th></th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section>
+
+		<!-- 리뷰 목록 및 업데이트 모달 -->
+		<div id="reviewListContainer">
+
+			<div th:if="${not #lists.isEmpty(reviews)}" id="reviewList" class="container">
+				<div class="row">
+					<h5 class="text-center"><strong>REVIEW</strong></h5>
+					<div class="col-md-12">
+						<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>리뷰 번호　　　</th>
+										<th>리뷰 아이템　　　　　　　　　　　</th>
+										<th>리뷰 사진　　　</th>
+										<th>리뷰 내용　　　　　　　　　　　　　　　　　　</th>
+										<th>리뷰 유저　　　</th>
+										<th>좋아요　　</th>
+										<th>수정</th>
+										<th>삭제</th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="review : ${reviews}">
+										<td th:text="${review.displayNumber != null ? review.displayNumber : '🎈새 리뷰'}">
+										</td>
+										<td th:text="${review.item.name}"></td>
+										<td>
+											<div class="image-container">
+												<img th:src="@{/getImage/{rvid}(rvid=${review.rvid})}"
+													style="max-width: 80px; max-height: 80px;" class="hover-zoom"
+													 
+													onclick="openModal(this, 'imagemodal');">
+												<div id="hover-message">🔍</div>
+											</div>
+										</td>
+										<td th:text="${review.contents}"></td>
+										<td th:text="${#strings.substring(review.users.firstname, 0, 1)} + '****'"></td>
+
+										<td>
+											<button th:if="${loggedInUser != null}"
+												th:class="${loggedInUser != null} ? 'btn btn-success' : 'btn btn-outline-success'"
+												th:onclick="'javascript:likeReview(' + ${review.rvid} + '); javascript:updateLikes(' + ${review.rvid} + ')'"
+												th:text="'😍' + ${review.likes}"></button>
+
+											<button th:unless="${loggedInUser != null}"
+												th:class="${loggedInUser != null} ? 'btn btn-success' : 'btn btn-outline-success'"
+												th:onclick="'javascript:void(0);'"
+												th:text="'😍' + ${review.likes}"></button>
+										</td>
+
+										<td>
+											<button type="button" class="btn btn-warning" data-toggle="modal"
+												th:data-target="'#updateReviewModal' + ${review.rvid}"
+												th:if="${loggedInUser != null and review.users != null and (loggedInUser.email == 'admin@admin.com' or review.users.usersid == loggedInUser.usersid)}">
+												수정
+											</button>
+
+
+											<!-- 업데이트 모달 폼 -->
+											<div th:id="'updateReviewModal' + ${review.rvid}" class="modal fade"
+												tabindex="-1" role="dialog">
+												<div class="modal-dialog" role="document">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title">리뷰 수정</h5>
+															<button type="button" class="close" data-dismiss="modal"
+																aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														<div class="modal-body">
+															<form th:action="@{/updateReview}" method="post">
+																<input type="hidden" name="rvid"
+																	th:value="${review.rvid}" />
+																<input type="hidden" name="itemid"
+																	th:value="${review.item.itemid}" />
+																<input type="hidden" name="usersid"
+																	th:value="${review.users.usersid}" />
+
+																<div class="form-group">
+																	<textarea name="contents" class="form-control"
+																		rows="2" placeholder="Your Updated Review"
+																		th:text="${review.contents}"></textarea>
+																</div>
+																<button type="submit"
+																	class="btn btn-primary">Update</button>
+															</form>
+														</div>
+
+													</div>
+												</div>
+											</div>
+										</td>
+										<td>
+
+											<a th:if="${loggedInUser != null and (loggedInUser.email == 'admin@admin.com' or review.users != null and review.users.usersid == loggedInUser.usersid)}"
+												th:href="@{/deleteReview/{rvid}(rvid=${review.rvid})}"
+												class="btn btn-danger">
+												삭제
+											</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<p th:if="${#lists.isEmpty(reviews)}" class="text-center2">리뷰가 없습니다. 새로운 리뷰를 작성해보세요.🎈</p>
+
+		</div>
+
+
+		<div class="custom-container">
+			<div class="custom-form">
+
+				<form th:action="@{/addReview}" method="post" class="my-2 text-center" style="margin: auto;"
+					enctype="multipart/form-data">
+					<input type="hidden" name="itemid" th:value="${item.getItemid()}" />
+					<input type="hidden" name="usersid" th:value="${users}" />
+
+					<!-- 별점 선택 -->
+					<div class="form-group">
+						<label for="rating">WRITE📝 </label>
+						<select name="rating" class="form-control" id="rating" onchange="updateContentsWithRating()">
+							<option value="none">⭐ 선택</option>
+							<option value="⭐ ">⭐</option>
+							<option value="⭐⭐ ">⭐⭐</option>
+							<option value="⭐⭐⭐ ">⭐⭐⭐</option>
+							<option value="⭐⭐⭐⭐ ">⭐⭐⭐⭐</option>
+							<option value="⭐⭐⭐⭐⭐ ">⭐⭐⭐⭐⭐</option>
+						</select>
+					</div>
+
+
+					<!-- 리뷰 내용 -->
+					<div class="form-group">
+						<textarea name="contents" id="contents" class="form-control" rows="2"
+							placeholder="Your Review"></textarea>
+					</div>
+
+					<div class="form-group">
+						<label for="reviewImage"></label>
+						<input multiple type="file" name="reviewImage" accept="image/*">
+					</div>
+
+					<script>
+						// 별점이 변경될 때마다 호출되는 함수
+						function updateContentsWithRating() {
+							// 선택된 별점을 가져와서 "별점: "과 함께 텍스트로 변환
+							var selectedRating = document.getElementById("rating").value;
+							var updatedContents = "" + selectedRating;
+
+							// 리뷰 내용 업데이트
+							document.getElementById("contents").value = updatedContents;
+						}
+					</script>
+
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</form>
+			</div>
+
+
+
+
+	</section>
+
+
+	<!--*추가*-->
+
+	<body onload="fetchAndDisplayAnswers()">
+		<div th:if="${successMessage}" class="success-message">
+			<script th:inline="javascript">
+				/* Retrieve the success message from the model */
+				var successMessage = /*[[${successMessage}]]*/ '';
+
+				/* Check if the success message exists and display it using JavaScript */
+				if (successMessage) {
+					alert(successMessage);
+				}
+			</script>
+		</div>
+		<section id="qna">
+			<div class="container">
+				<h3>Q&A</h3>
+
+				<div class="row">
+					<div class="col-sm-12">
+						<table style="border-collapse: collapse; width: 100%; font-family: 'Noto Sans KR', sans-serif;">
+							<thead>
+								<tr style="border-bottom: #dddddd 1px solid; border-top: #dddddd 1px solid;">
+									<th
+										style="text-align: center; padding-top: 8px; border-left: #dddddd 1px solid; padding-bottom: 8px; width: 100px;">
+										상품명
+									</th>
+									<th style="text-align: center; border-left: #dddddd 1px solid;  width: 100px;">아이디
+									</th>
+									<th style="text-align: center; border-left: #dddddd 1px solid; width: 500px;">질문
+									</th>
+									<th style="text-align: center; border-left: #dddddd 1px solid; width: 500px;">답변
+									</th>
+									<th
+										style="text-align: center; border-left: #dddddd 1px solid; width: 100px; border-right: #dddddd 1px solid;">
+										삭제</th>
+									<th style="text-align: center; border-right: #dddddd 1px solid; width: 100px;">수정
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr style="border-bottom: #dddddd 1px solid;" th:each="qna, iterStat : ${qnaList}"
+									th:class="'item-' + ${iterStat.count}">
+									<td style="text-align: center; border-left: #dddddd 1px solid;"><span
+											th:text="${item.name}" class="qna-name"></span></td>
+									<td style="text-align: center; border-left: #dddddd 1px solid;"><span
+											th:text="${#strings.substring(qna.users.firstname, 0, 1)} + '****'"></span>
+									</td>
+									<td style="border-left: #dddddd 1px solid; border-right: #dddddd 1px solid;">
+										<ul class="qna">
+											<li>
+												<input type="checkbox" th:id="'qna-' + ${qna.qnaid}">
+												<label th:for="'qna-' + ${qna.qnaid}" class="qna-label">
+													<span th:text="${qna.question}" class="qna-content"></span>
+												</label>
+												<div class="qna-details" th:id="'qna-details-' + ${qna.qnaid}">
+													<p th:text="${qna.question}" class="qna-content"></p>
+												</div>
+											</li>
+										</ul>
+									</td>
+									<th:block th:if="${session.isAdmin}">
+										<td style="text-align: right;">
+											<div class="answerSection"
+												style="display: flex; justify-content: space-between; gap: 8px;">
+												<form class="answerFormContent" method="post">
+													<input type="hidden" name="qnaid" th:value="${qna.qnaid}">
+													<textarea name="answer" rows="2" cols="50"
+														placeholder="답변 내용"></textarea>
+													<button type="submit" class="btn btn-info">확인</button>
+												</form>
+												<div class="answerContent" style="display: none;"></div>
+												<button class="editButton"><i class="fas fa-edit"
+														style="color: gray;"></i></button>
+											</div>
+										</td>
+
+									</th:block>
+
+									<th:block th:unless="${session.isAdmin}" style="border-left: #dddddd 1px solid;">
+										<td>
+											<div class="answerContent">
+												<p th:if="${qna.answer != null}" th:text="${qna.answer}"></p>
+												<p th:if="${qna.answer == null}">답변이 아직 작성되지 않았습니다.</p>
+											</div>
+										</td>
+									</th:block>
+									<td
+										style="text-align: center; border-left: #dddddd 1px solid; border-right: #dddddd 1px solid;">
+										<form class="deleteForm" th:action="@{/delete/{qnaid}(qnaid=${qna.qnaid})}"
+											method="post">
+											<button type="submit" class="btn btn-danger">삭제</button>
+										</form>
+									</td>
+									<td style="border-right: solid 1px #dddddd ; text-align: center;">
+										<form th:action="@{/edit}" method="get">
+											<input type="hidden" name="qnaid" th:value="${qna.qnaid}">
+											<!--<button type="submit" class="btn btn-success">수정</button>-->
+											<button class="btn btn-success">수정</button>
+										</form>
+
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<br><br>
+				<form action="/popup" method="POST" style="text-align: right;">
+					<input type="hidden" name="itemid" th:value="${item.getItemid()}">
+					<button type="submit">문의하기</button>
+				</form>
+			</div>
+		</section>
+	</body>
+
+
+
+
+
+
+	<br><br><br><br><br><br>
+	<div style="width: 66%; margin-left:auto;margin-right: auto;">
+		<th:block th:insert="utils/footer.html :: footer"></th:block>
+	</div>
+	<th:block th:insert="utils/imports.html :: mainjs"></th:block>
+
+
+	<script>
+		$(document).ready(function () {
+			// 초기에 한 번 리뷰 목록을 가져옴
+			updateReviewList();
+
+
+			// 리뷰 목록을 가져오고 동적으로 업데이트
+			function updateReviewList() {
+				// 현재 아이템의 아이디를 추출
+				var currentItemId = $("#currentItemId").val();
+
+				// 서버에서 현재 아이템의 리뷰 목록을 비동기로 가져오기
+				$.get("/reviews/" + currentItemId, function (data) {
+					// 서버에서 받아온 리뷰 목록(data)을 사용하여 동적으로 업데이트
+					$("#reviewListContainer").html(data);
+
+					// 업데이트 버튼에 대한 클릭 이벤트 등록
+					$('.btn-warning').click(function () {
+						var targetModalId = $(this).attr('data-target');
+
+						// 모달을 강제로 열기
+						$(targetModalId).modal('show');
+					});
+				});
+			}
+		});
+
+		function displayMessage(event) {
+			var hoverMessage = document.getElementById('hover-message');
+			hoverMessage.style.top = (event.clientY + window.scrollY) + 'px';
+			hoverMessage.style.left = (event.clientX + window.scrollX) + 'px';
+			hoverMessage.style.display = 'block';
+		}
+
+		function hideMessage() {
+			var hoverMessage = document.getElementById('hover-message');
+			hoverMessage.style.display = 'none';
+		}
+
+		function openModal(imgElement, modalType) {
+			// Check if modal is already open to prevent duplicates
+			if (document.querySelector('.' + modalType)) {
+				return;
+			}
+
+			// Hide the hover message when modal is opened
+			hideMessage();
+
+			var modal = document.createElement('div');
+			modal.className = modalType; // Use the provided modalType
+
+			var modalContent = document.createElement('img');
+			modalContent.src = imgElement.src;
+			modalContent.className = 'modal-content';
+
+			modal.appendChild(modalContent);
+
+			document.body.appendChild(modal);
+
+			modal.style.display = 'block';
+
+			// Modal click to close logic
+			modal.onclick = function () {
+				modal.style.display = 'none';
+				document.body.removeChild(modal);
+			};
+		}
+
+
+
+		function likeReview(rvid) {
+			// Ajax를 이용한 서버 통신
+			// jQuery를 사용하는 경우
+			$.ajax({
+				type: 'POST',
+				url: '/likeReview/' + rvid,
+				success: function (response) {
+					// 업데이트가 성공했을 때의 처리
+					// 예를 들어, 좋아요 수를 업데이트하거나 버튼의 스타일을 변경하는 등
+
+					// Assuming the response contains the updated like count
+					var updatedLikeCount = response.likeCount;
+
+					// Update the like count in the UI
+					var likeCountElement = $('#likeCount_' + rvid);
+					likeCountElement.text(updatedLikeCount);
+
+					console.log('좋아요가 성공적으로 업데이트되었습니다.');
+				},
+				error: function (error) {
+					// 에러 처리
+					console.error('좋아요 업데이트 중 오류가 발생했습니다.');
+				}
+			});
+		}
+
+
+		function updateLikes(rvid) {
+			$.ajax({
+				type: 'POST',
+				url: '/updateLikes',
+				data: {rvid: rvid},
+				success: function (response) {
+					console.log('updateLikes Success:', response);
+
+					// Assuming you want to update the UI with the new like count
+					var likeCountElement = $('#likeCount_' + rvid);
+					likeCountElement.text(parseInt(likeCountElement.text()));
+
+					// Reload the page after the like is updated
+					location.reload();
+				},
+				error: function (error) {
+					console.error('updateLikes Error:', error);
+				}
+			});
+		}
+
+
+
+	</script>
+
+
+
+
+
+
+
+	<script>
+
+		document.addEventListener("DOMContentLoaded", function () {
+
+			// 모든 클래스가 "price"인 요소를 선택 강희씨 소스
+
+			var priceElements = document.querySelectorAll(".price");
+
+
+
+			// 각 요소에 대해 반복
+
+			priceElements.forEach(function (priceElement) {
+
+				var price = priceElement.textContent;
+
+
+
+				// 쉼표 추가 로직
+
+				var formattedPrice = parseFloat(price).toLocaleString('en-US');
+
+
+
+				// 결과를 다시 h2 요소에 설정
+
+				priceElement.textContent = formattedPrice + '원';
+
+			});
+
+		});
+
+	</script>
+
+
+
+	<!--<script>
+
+function openPopup() {
+
+window.open('/popup', '팝업', 'width=800,height=600');
+
+}
+
+ 
+
+</script>-->
+
+
+
+	<script>
+
+		function openPopup() {
+
+
+
+			fetch('/check-login-status', {
+
+				method: 'GET',
+
+				credentials: 'include'
+
+			})
+
+
+
+				.then(response => {
+
+					if (response.ok) {
+
+						// 로그인되어 있을 때 팝업 열기
+
+						window.open('/popup', '_blank', 'width=800,height=600');
+
+					} else {
+
+						// 로그인되어 있지 않을 때 로그인 페이지로 이동
+
+						window.location.href = '/login';
+
+					}
+
+				})
+
+				.catch(error => {
+
+					console.error('로그인 상태 확인 중 오류 발생:', error);
+
+				});
+
+		}
+
+	</script>
+
+
+	<!-- Q&A -->
+	<!-- 삭제 -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			// 클래스를 통한 삭제 이벤트 바인딩
+			$('.deleteForm').submit(function (event) {
+				event.preventDefault(); // 기본 제출 방지
+
+				if (confirm("정말로 삭제하시겠습니까?")) {
+					var qnaId = $(this).attr('action').split('/').pop(); // 삭제할 QnA ID 가져오기
+
+					// QnA 삭제를 위한 AJAX 요청 보내기
+					$.ajax({
+						type: 'POST',
+						url: '/delete/' + qnaId,
+						success: function (response) {
+							alert(response); // 삭제 성공 메시지 보여주기
+							if (response.includes('삭제가 완료되었습니다.')) {
+								window.location.reload();
+							}
+						},
+						error: function (xhr, status, error) {
+							// 오류 메시지 처리
+							if (xhr.status === 401) {
+								alert('삭제 권한이 없습니다!!');
+							} else if (xhr.status === 404) {
+								alert('요청한 QnA가 존재하지 않습니다!!');
+							} else {
+								alert('삭제를 처리하는 중에 오류가 발생했습니다!!');
+							}
+						}
+					});
+				} else {
+					console.log("삭제가 취소되었습니다.");
+				}
+			});
+		});
+	</script>
+
+
+	<!-- 답변 -->
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			function fetchAndDisplayAnswers() {
+				$('.answerFormContent').each(function () {
+					var qnaId = $(this).find('input[name="qnaid"]').val();
+					var savedAnswer = localStorage.getItem('answer_' + qnaId);
+
+					if (savedAnswer) {
+						$(this).hide();
+						$(this).siblings('.answerContent').text(savedAnswer).show();
+						$(this).siblings('.deleteButton').show(); // Show delete button if answer exists
+					}
+				});
+			}
+
+			fetchAndDisplayAnswers();
+
+
+			$('.editButton').each(function () {
+				var answerContent = $(this).siblings('.answerContent');
+				var savedAnswer = answerContent.text().trim(); // 답변 내용 가져오기
+
+				// 답변 내용이 있는 경우에만 수정 버튼 표시
+				if (savedAnswer !== '') {
+					$(this).show();
+				} else {
+					$(this).hide();
+				}
+			});
+
+			$('.editButton').click(function () {
+				var form = $(this).siblings('.answerFormContent');
+				var answerContent = $(this).siblings('.answerContent');
+				var qnaId = form.find('input[name="qnaid"]').val();
+
+				// 이전에 저장된 답변 내용을 로컬 저장소에서 가져옴
+				var savedAnswer = localStorage.getItem('answer_' + qnaId);
+
+				// 폼을 수정 가능한 상태로 설정하고 이전 내용을 채워넣음
+				form.find('textarea[name="answer"]').val(savedAnswer);
+				form.show(); // 폼을 보여줌
+				answerContent.hide(); // 답변 내용을 숨김
+			});
+
+
+			$('.answerFormContent').submit(function (event) {
+				event.preventDefault();
+
+				var form = $(this);
+				var qnaId = form.find('input[name="qnaid"]').val();
+				var formData = form.serialize();
+
+				$.ajax({
+					type: form.attr('method'),
+					url: '/answer', // 이 부분은 실제 서버의 엔드포인트로 수정되어야 합니다.
+					data: formData,
+					success: function (response) {
+						form.hide();
+						form.siblings('.answerContent').text(response).show();
+
+						// 답변을 로컬 스토리지에 저장합니다.
+						localStorage.setItem('answer_' + qnaId, response);
+
+						// 답변을 달고 수정 버튼을 바로 보이도록 처리
+						form.siblings('.editButton').show();
+					},
+					error: function (xhr, status, error) {
+						console.error(error);
+					}
+				});
+			});
+		});
+	</script>
+
+
+</body>
+
+</html>

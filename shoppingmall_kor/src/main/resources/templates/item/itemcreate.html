@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title> Add Item</title>
+	<th:block th:insert="utils/imports.html :: meta"></th:block>
+	<th:block th:insert="utils/imports.html :: maincss"></th:block>
+
+	<style>
+		
+		/* 스타일을 추가합니다. */
+		.custom-select {
+			width: 470px;
+			/* 선택 박스의 너비 조절 */
+			padding: 5px;
+			border: 2px solid rgb(172, 172, 172);
+			border-radius: 4px;
+			background-color: rgb(255, 255, 255);
+			/* 박스의 배경색 */
+			text-align: center;
+		}
+
+		select {
+			width: 100%;
+			/* 선택 박스의 너비 조절 */
+			padding: 5px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			background-color: #f8f8f8;
+			/* 셀렉트 박스의 배경색 */
+			color: #333;
+			/* 셀렉트 박스의 텍스트 색상 */
+		}
+
+		/* 옵션 스타일 */
+		option {
+			background-color: #f8f8f8;
+			/* 옵션의 배경색 */
+			color: #333;
+			/* 옵션의 텍스트 색상 */
+		}
+	
+
+ 
+	</style>
+</head><!--/head-->
+
+<body>
+	<th:block th:insert="utils/header.html :: header"></th:block>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-11 padding-right">
+				<div class="product-details">
+					<div class="col-sm-8">
+						<div class="product-information">
+							<div class="signup-form">
+								<form action="/addItem" method="post" th:object="${item}" enctype="multipart/form-data">
+									<input type="text" placeholder="이름" name="name" required>
+									<input type="text" placeholder="정보" name="description" />
+									<input type="number" placeholder="가격" name="price" required>
+									<input multiple type="file" name="imageFile" />
+									<label>세일여부: </label><input type="checkbox" name="sale">
+									<input type="number" placeholder="수량" name="stock" />
+									<div class="custom-select">
+										<select name="category">
+											<th:block th:each="category : ${category}">
+												<option th:text="${category}" th:value="${category}"></option>
+											</th:block>
+										</select>
+									</div>
+									<br><br>
+									<label>상품디테일사진</label>
+									<input multiple type="file" name="imageFile2" />
+									<br><br><br>
+
+									<button type="submit" class="btn btn-default">등록</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</section>
+	<br><br><br><br><br><br>
+	<div style="width: 66%; margin-left:auto;margin-right: auto; ">
+		<th:block th:insert="utils/footer.html :: footer"></th:block>
+	</div>
+	<th:block th:insert="utils/imports.html :: mainjs"></th:block>
+
+</body>
+
+</html>

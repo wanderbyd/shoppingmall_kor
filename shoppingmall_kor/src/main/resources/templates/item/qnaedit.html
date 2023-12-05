@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>수정</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <form th:object="${qna}" action="/update" method="post">
+            <input type="hidden" th:field="*{qnaid}">
+            <div class="form-group">
+                <label>Q&A 번호:</label>
+                <input type="text" th:field="*{qnaid}" class="form-control" readonly="readonly">
+            </div>
+
+            <div class="form-group">
+                <label>Q&A 아이템:</label>
+                <input type="text" th:field="*{item.name}" class="form-control" readonly="readonly">
+            </div>
+
+            <div class="form-group">
+                <label>유저 이름:</label>
+                <input type="text" th:field="*{users.firstname}" class="form-control" readonly="readonly">
+            </div>
+
+            <div class="form-group">
+                <label>질문:</label>
+                <textarea th:field="*{question}" class="form-control" rows="3" cols="50"></textarea>
+            </div>
+
+            <input type="hidden" name="referer" th:value="${referer}">
+
+            <button type="submit" class="btn btn-primary">저장</button>
+        </form>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+</body>
+
+</html>
